@@ -24,12 +24,14 @@ export async function POST(req: Request) {
 
     const chosenSize: "256x256" | "512x512" | "1024x1024" =
       SUPPORTED_SIZES.has(size ?? "1024x1024") ? (size ?? "1024x1024") : "1024x1024";
-
+    const org = process.env.OPENAI_ORG_ID;
     const r = await fetch("https://api.openai.com/v1/images/generations", {
+    
       method: "POST",
       headers: {
         Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
+        ...(org ? { "OpenAI-Organization": org } : {}),
       },
       body: JSON.stringify({
         model: "gpt-image-1",

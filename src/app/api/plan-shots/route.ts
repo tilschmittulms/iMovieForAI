@@ -46,12 +46,13 @@ Target total duration (sec): ${total}
 
     // Try a broadly-available model; we can switch if account lacks access
     const model = "gpt-4o"; // fallback from gpt-4o-mini if needed
-
+    const org = process.env.OPENAI_ORG_ID;
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
+        ...(org ? { "OpenAI-Organization": org } : {}),
       },
       body: JSON.stringify({
         model,
